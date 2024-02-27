@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Gallery {
+  id              Int      @id @default(autoincrement())
+  title           String
+  featuredImage   Image?   @relation(name: "FeaturedImage", fields: [featuredImageId], references: [id])
+  featuredImageId Int?
+  images          Image[]  @relation("GalleryToImage") // relation many-to-many
+}
+
+model Image {
+  id        Int       @id @default(autoincrement())
+  title     String?
+  path      String
+  content   String?
+  date      DateTime?
+  place     String?
+  galleries Gallery[] @relation("GalleryToImage") // relation many-to-many
+  galleriesAsFeaturedImage Gallery[] @relation("FeaturedImage")
+}
