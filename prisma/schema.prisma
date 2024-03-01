@@ -23,7 +23,7 @@ model Image {
   title     String?
   path      String
   content   String?
-  date      DateTime?
+  date      String?
   place     String?
   galleries Gallery[] @relation("GalleryToImage") // relation many-to-many
   galleriesAsFeaturedImage Gallery[] @relation("FeaturedImage")
