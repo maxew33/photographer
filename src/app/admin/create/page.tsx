@@ -9,22 +9,25 @@ export default function createData() {
     async function createGallery(formData: FormData) {
         // This needs to be a server action
         'use server'
-        console.log(123)
+
         // check the inputs
         const title = formData.get('galleryTitle') as string
         const featuredImageId = parseInt(formData.get('galleryIllus') as string)
 
         // create a new record in the db
-        const gallery = await db.gallery.create({
-            data: {
-                title,
-                featuredImageId,
-            },
-        })
+        try {
+            const gallery = await db.gallery.create({
+                data: {
+                    title,
+                    featuredImageId,
+                },
+            })
+            // confirmation modal + erase the form
 
-        // confirmation modal + erase the form
-
-        console.log(title, featuredImageId)
+            console.log(gallery, title, featuredImageId)
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     async function createImage(formData: FormData) {
@@ -34,7 +37,7 @@ export default function createData() {
         // check the inputs
         const title = formData.get('imageTitle') as string
         const path = formData.get('imagePath') as string
-        const content  =formData.get('imageDescription') as string
+        const content = formData.get('imageDescription') as string
         const date = formData.get('imageDate')?.toLocaleString() as string
         const place = formData.get('imagePlace') as string
         // const galleries = formData.get('imageGalleries') as [string]
@@ -95,8 +98,8 @@ export default function createData() {
             </h2>
 
             <Link href="/admin">Admin panel</Link>
-
-            <Link href="/"> - Accueil</Link>
+            <br />
+            <Link href="/">Accueil</Link>
         </>
     )
 }
