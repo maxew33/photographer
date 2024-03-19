@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '../Create.module.css'
 import Link from 'next/link'
 import { db } from '@/db'
+import { redirect } from 'next/navigation'
 
 export default function NewEntry() {
     async function createImage(formData: FormData) {
@@ -27,7 +28,8 @@ export default function NewEntry() {
                 // galleries
             },
         })
-
+        // Redirect the user to the admin page
+        redirect('/admin')
         // confirmation modal + erase the form
     }
     return (

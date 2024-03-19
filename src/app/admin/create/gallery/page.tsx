@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '../Create.module.css'
 import Link from 'next/link'
 import { db } from '@/db'
+import { redirect } from 'next/navigation'
 
 export default function NewGallery() {
     async function createGallery(formData: FormData) {
@@ -26,6 +27,9 @@ export default function NewGallery() {
         } catch (err) {
             console.error(err)
         }
+
+        // Redirect the user to the admin page
+        redirect('/admin')
     }
     return (
         <>
