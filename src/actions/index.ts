@@ -14,3 +14,11 @@ export async function editGallery(id: number, updatedGallery: Gallery) {
 
     redirect('/admin')
 }
+
+export async function deleteGallery(id: number){
+    await db.gallery.delete({
+        where: {id}
+    })
+
+    redirect('/admin')
+}

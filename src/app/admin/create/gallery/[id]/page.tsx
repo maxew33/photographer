@@ -21,9 +21,8 @@ export default async function Gallery(props: GalleryProps) {
     }
     return (
         <>
-            <div>gallery - {gallery.title}</div>
-            <hr />
-            <div>edit gallery</div>
+            <h1>edit gallery</h1>
+            <br/>
             <GalleryEditor gallery={gallery}/>
             <hr/>
             <Link href="/admin">Admin panel</Link>

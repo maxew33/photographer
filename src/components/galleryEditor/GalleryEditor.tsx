@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import type { Gallery } from '@prisma/client'
-import { editGallery } from '@/actions'
+import * as action from '@/actions'
 
 interface GalleryProps {
     gallery: Gallery
@@ -11,18 +11,22 @@ interface GalleryProps {
 export default function GalleryEditor({ gallery }: GalleryProps) {
     const [updatedGallery, setUpdatedGallery] = useState(gallery)
 
-    console.log(updatedGallery)
-
-    const editGalleryAction = editGallery.bind(null, updatedGallery.id, updatedGallery)
+    const editGalleryAction = action.editGallery.bind(
+        null,
+        updatedGallery.id,
+        updatedGallery
+    )
 
     const changeTitle = (e: { target: { value: string } }) => {
         setUpdatedGallery({ ...updatedGallery, title: e.target.value })
     }
 
+    const deleteGallery = () => {
+        action.deleteGallery(gallery.id)
+    }
+
     return (
         <>
-            <div>GalleryEditor : {gallery.title} </div>
-            <br />
             <form action={editGalleryAction}>
                 <label htmlFor="galleryTitle">Nom de la galerie :</label>
                 <input
@@ -38,8 +42,11 @@ export default function GalleryEditor({ gallery }: GalleryProps) {
                 </label>
                 <select name="galleryIllus" id="galleryIllus"></select>
                 <br />
+                <br />
                 <button type="submit">submit</button>
             </form>
+            <br />
+            <button onClick={deleteGallery}>delete</button>
         </>
     )
 }
