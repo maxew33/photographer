@@ -21,7 +21,7 @@ model Gallery {
 model Image {
   id        Int       @id @default(autoincrement())
   title     String?
-  path      String
+  imagePath    String?
   content   String?
   date      String?
   place     String?

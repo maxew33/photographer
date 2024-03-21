@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default async function Admin() {
     const galleries = await db.gallery.findMany()
 
-    const images = await db.image.findMany()
+    // const images = await db.image.findMany()
 
     const rendredGalleries = galleries.map((gallery) => {
         return (
@@ -20,19 +20,19 @@ export default async function Admin() {
         )
     })
 
-    const rendredImages = images.map((image) => {
-        return (
-            <>
-                <Link
-                    key={`img${image.id}`}
-                    href={`/admin/create/gallery/${image.id}`}
-                >
-                    {image.title}
-                </Link>
-                <br/>
-            </>
-        )
-    })
+    // const rendredImages = images.map((image) => {
+    //     return (
+    //         <>
+    //             <Link
+    //                 key={`img${image.id}`}
+    //                 href={`/admin/create/gallery/${image.id}`}
+    //             >
+    //                 {image.title}
+    //             </Link>
+    //             <br/>
+    //         </>
+    //     )
+    // })
 
     return (
         <>
@@ -42,7 +42,7 @@ export default async function Admin() {
             {rendredGalleries}
             <hr />
             <h2>images</h2>
-            {rendredImages}
+            {/* {rendredImages} */}
             <hr />
             <Link href="/admin/create/gallery">Create gallery</Link>
             <br />

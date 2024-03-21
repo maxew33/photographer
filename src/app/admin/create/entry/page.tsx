@@ -3,6 +3,9 @@ import styles from '../Create.module.css'
 import Link from 'next/link'
 import { db } from '@/db'
 import { redirect } from 'next/navigation'
+import { writeFile } from 'fs/promises'
+import { NextResponse } from 'next/server'
+import path from 'path'
 
 export default function NewEntry() {
     async function createImage(formData: FormData) {
@@ -11,31 +14,34 @@ export default function NewEntry() {
 
         // check the inputs
         const title = formData.get('imageTitle') as string
-        const path = formData.get('imagePath') as string
+        const imagePath = formData.get('imagePath') as string
         const content = formData.get('imageDescription') as string
         const date = formData.get('imageDate')?.toLocaleString() as string
         const place = formData.get('imagePlace') as string
         // const galleries = formData.get('imageGalleries') as [string]
 
-        const fileInput = formData.get('upload')
-
+        const fileInput = formData.get('upload') as File
 
         if (fileInput) {
-            // a file is given
-            console.log(fileInput)
-            /*const file = fileInput.files[0]
-
-            const formData = new FormData()
-            formData.append('file', file)
-
-            fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            })
-                .then((response) => response.json())
-                .then((data) => console.log(data))
-                .catch((error) => console.error(error))*/
-                        console.log(fileInput)
+           
+            // Convert the file data to a Buffer
+            const buffer = Buffer.from(await fileInput.arrayBuffer())
+            const filename = fileInput.name.replaceAll(' ', '_')
+            console.log(filename, buffer)
+            try {
+                console.log('here i am')
+                // Write the file to the specified directory (public/assets) with the modified filename
+                await writeFile(
+                    path.join(process.cwd(), 'public/assets/' + filename),
+                    buffer
+                )
+                console.log('upload done')
+                // Return a JSON response with a success message and a 201 status code
+            } catch (error) {
+                console.log('merde')
+                // If an error occurs during file writing, log the error and return a JSON response with a failure message and a 500 status code
+                console.log('Error occurred ', error)
+            }
         } else {
             // no file provided
         }
@@ -44,7 +50,7 @@ export default function NewEntry() {
         const image = await db.image.create({
             data: {
                 title,
-                path,
+                imagePath,
                 content,
                 date,
                 place,
