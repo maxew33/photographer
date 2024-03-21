@@ -17,6 +17,29 @@ export default function NewEntry() {
         const place = formData.get('imagePlace') as string
         // const galleries = formData.get('imageGalleries') as [string]
 
+        const fileInput = formData.get('upload')
+
+
+        if (fileInput) {
+            // a file is given
+            console.log(fileInput)
+            /*const file = fileInput.files[0]
+
+            const formData = new FormData()
+            formData.append('file', file)
+
+            fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => console.log(data))
+                .catch((error) => console.error(error))*/
+                        console.log(fileInput)
+        } else {
+            // no file provided
+        }
+
         // create a new record in the db
         const image = await db.image.create({
             data: {
@@ -55,6 +78,7 @@ export default function NewEntry() {
                     id="imageGalleries"
                     multiple
                 ></select>
+                <input type="file" name="upload" id="upload" />
                 <button type="submit">submit</button>
             </form>
             <br />
