@@ -1,4 +1,7 @@
+import ImageEditor from '@/components/imageEditor/ImageEditor'
 import { db } from '@/db'
+import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 interface ImageProps {
@@ -15,5 +18,19 @@ export default async function page(props: ImageProps) {
     if (!image) {
         return notFound()
     }
-    return <div>entry - {image.place}</div>
+    return (
+        <>
+            <h1>edit image</h1>
+            <br />
+            <ImageEditor image={image} />
+            <hr />
+            <Link href="/admin">Admin panel</Link>
+            <Image
+                src={image.imagePath ?? ''}
+                alt={image.title ?? ''}
+                width="400"
+                height="400"
+            />
+        </>
+    )
 }

@@ -4,71 +4,80 @@ import Link from 'next/link'
 import { db } from '@/db'
 import { redirect } from 'next/navigation'
 import { writeFile } from 'fs/promises'
-import { NextResponse } from 'next/server'
 import path from 'path'
+import ImageCreator from '@/components/imageCreator/ImageCreator'
 
 export default function NewEntry() {
-    async function createImage(formData: FormData) {
-        // This needs to be a server action
-        'use server'
+    // async function createImage(formData: FormData) {
+    //     // This needs to be a server action
+    //     'use server'
 
-        // check the inputs
-        const title = formData.get('imageTitle') as string
-        const imagePath = formData.get('imagePath') as string
-        const content = formData.get('imageDescription') as string
-        const date = formData.get('imageDate')?.toLocaleString() as string
-        const place = formData.get('imagePlace') as string
-        // const galleries = formData.get('imageGalleries') as [string]
+    //     // check the inputs
+    //     const title = formData.get('imageTitle') as string
+    //     const content = formData.get('imageDescription') as string
+    //     const date = formData.get('imageDate')?.toLocaleString() as string
+    //     const place = formData.get('imagePlace') as string
 
-        const fileInput = formData.get('upload') as File
+    //     const fileInput = formData.get('upload') as File
 
-        if (fileInput) {
-           
-            // Convert the file data to a Buffer
-            const buffer = Buffer.from(await fileInput.arrayBuffer())
-            const filename = fileInput.name.replaceAll(' ', '_')
-            console.log(filename, buffer)
-            try {
-                console.log('here i am')
-                // Write the file to the specified directory (public/assets) with the modified filename
-                await writeFile(
-                    path.join(process.cwd(), 'public/assets/' + filename),
-                    buffer
-                )
-                console.log('upload done')
-                // Return a JSON response with a success message and a 201 status code
-            } catch (error) {
-                console.log('merde')
-                // If an error occurs during file writing, log the error and return a JSON response with a failure message and a 500 status code
-                console.log('Error occurred ', error)
-            }
-        } else {
-            // no file provided
-        }
+    //     if (!fileInput) {
+    //         console.error('No file selected')
+    //         return
+    //     }
 
-        // create a new record in the db
-        const image = await db.image.create({
-            data: {
-                title,
-                imagePath,
-                content,
-                date,
-                place,
-                // galleries
-            },
-        })
-        // Redirect the user to the admin page
-        redirect('/admin')
-        // confirmation modal + erase the form
-    }
+    //     // Validate file extension
+    //     const allowedExtensions = ['.jpg', '.jpeg', '.png']
+    //     const fileExtension = path.extname(fileInput.name).toLowerCase()
+    //     if (!allowedExtensions.includes(fileExtension)) {
+    //         console.error('Invalid file extension')
+    //         return
+    //     }
+
+    //     // Validate file size
+    //     const maxSizeInBytes = 5 * 1024 * 1024 // 10MB
+    //     if (fileInput.size > maxSizeInBytes) {
+    //         console.error('File size exceeds the limit')
+    //         return
+    //     }
+
+    //     // Convert the file data to a Buffer
+    //     const buffer = Buffer.from(await fileInput.arrayBuffer())
+    //     const filename = fileInput.name.replaceAll(' ', '_')
+    //     const filePath = 'public/assets/' + filename
+
+    //     const imagePath = '/assets/' + filename
+
+    //     try {
+    //         // Write the file to the specified directory (public/assets) with the modified filename
+    //         await writeFile(path.join(process.cwd(), filePath), buffer)
+    //         console.log('upload done')
+    //         // Return a JSON response with a success message and a 201 status code
+    //     } catch (error) {
+    //         // If an error occurs during file writing, log the error and return a JSON response with a failure message and a 500 status code
+    //         console.log('Error occurred ', error)
+    //     }
+
+    //     // create a new record in the db
+    //     const image = await db.image.create({
+    //         data: {
+    //             title,
+    //             imagePath,
+    //             content,
+    //             date,
+    //             place,
+    //             // galleries
+    //         },
+    //     })
+    //     // Redirect the user to the admin page
+    //     redirect('/admin')
+    //     // confirmation modal + erase the form
+    // }
     return (
         <>
             <h2>Créer une image</h2>
-            <form className={styles.form} action={createImage}>
+            {/* <form className={styles.form} action={createImage}>
                 <label htmlFor="imageTitle">Nom de l'image :</label>
                 <input type="text" name="imageTitle" id="imageTitle" />
-                <label htmlFor="imagePath">URL de l'image :</label>
-                <input type="text" name="imagePath" id="imagePath" />
                 <label htmlFor="imageDescription">
                     Description de l'image :
                 </label>
@@ -84,9 +93,10 @@ export default function NewEntry() {
                     id="imageGalleries"
                     multiple
                 ></select>
-                <input type="file" name="upload" id="upload" />
+                <input type="file" name="upload" id="upload" required />
                 <button type="submit">submit</button>
-            </form>
+            </form> */}
+            <ImageCreator/>
             <br />
             <Link href="/admin">Admin panel</Link>
             <br />
