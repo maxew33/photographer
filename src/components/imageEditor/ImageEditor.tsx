@@ -8,7 +8,7 @@ interface ImageProps {
     image: Image
 }
 
-export default function GalleryEditor({ image }: ImageProps) {
+export default function ImageEditor({ image }: ImageProps) {
     const [updatedImage, setUpdatedImage] = useState(image)
 
     const editImageAction = action.editImage.bind(
@@ -17,12 +17,14 @@ export default function GalleryEditor({ image }: ImageProps) {
         updatedImage
     )
 
+    console.log(image)
+
     const changeTitle = (e: { target: { value: string } }) => {
         setUpdatedImage({ ...updatedImage, title: e.target.value })
     }
 
-    const deleteImage = () => {
-        action.deleteImage(image.id)
+    const deleteImage = async () => {
+        action.deleteImage(image.id, image.imagePath ?? '')
     }
 
     return (
@@ -41,7 +43,7 @@ export default function GalleryEditor({ image }: ImageProps) {
                     Description de l'image :
                 </label>
                 <textarea name="imageDescription" id="imageDescription" />
-                
+
                 <label htmlFor="galleryIllus">
                     Image mise en avant de la galerie :
                 </label>
