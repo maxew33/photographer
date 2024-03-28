@@ -72,31 +72,39 @@ export default function NewEntry() {
     //     redirect('/admin')
     //     // confirmation modal + erase the form
     // }
+
+    interface FileData {
+        fileInput: File;
+        filePath: string;
+    }
+    
+        async function addImageInFolder(filedata: FileData) {
+        // This needs to be a server action
+        'use server'
+
+
+
+
+
+        // Convert the file data to a Buffer
+        const buffer = Buffer.from(await filedata.fileInput.arrayBuffer())
+   
+
+        try {
+            // Write the file to the specified directory (public/assets) with the modified filename
+            await writeFile(path.join(process.cwd(), filedata.filePath), buffer)
+            console.log('upload done')
+            // Return a JSON response with a success message and a 201 status code
+        } catch (error) {
+            // If an error occurs during file writing, log the error and return a JSON response with a failure message and a 500 status code
+            console.log('Error occurred ', error)
+        }
+   }
     return (
         <>
             <h2>Créer une image</h2>
-            {/* <form className={styles.form} action={createImage}>
-                <label htmlFor="imageTitle">Nom de l'image :</label>
-                <input type="text" name="imageTitle" id="imageTitle" />
-                <label htmlFor="imageDescription">
-                    Description de l'image :
-                </label>
-                <textarea name="imageDescription" id="imageDescription" />
-                <label htmlFor="imagePlace">Localisation :</label>
-                <input type="text" name="imagePlace" id="imagePlace" />
-
-                <label htmlFor="imageDate">Date de la prise de vue :</label>
-                <input type="date" name="imageDate" id="imageDate" />
-                <label htmlFor="imageGalleries">Galerie(s) :</label>
-                <select
-                    name="imageGalleries"
-                    id="imageGalleries"
-                    multiple
-                ></select>
-                <input type="file" name="upload" id="upload" required />
-                <button type="submit">submit</button>
-            </form> */}
-            <ImageCreator/>
+            
+            <ImageCreator addImageInFolder={addImageInFolder}/>
             <br />
             <Link href="/admin">Admin panel</Link>
             <br />

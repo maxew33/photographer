@@ -3,8 +3,13 @@
 import React from 'react'
 import * as action from '@/actions'
 import path from 'path'
+import { uploadImage } from '@/services'
 
-export default function ImageCreator() {
+interface FileData {
+    fileInput: File;
+    filePath: string;
+}
+export default function ImageCreator({ addImageInFolder }: { addImageInFolder: (filedata: FileData) => void }) {
     async function createImage(formData: FormData) {
         // check the inputs
         const title = formData.get('imageTitle') as string
@@ -40,7 +45,8 @@ export default function ImageCreator() {
         const imagePath = '/assets/' + filename
 
         action.CreateImage({ title, imagePath, content, date, place })
-
+        // uploadImage({fileInput, filePath})
+        addImageInFolder({fileInput, filePath})
     }
 
     return (
