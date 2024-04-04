@@ -8,11 +8,16 @@ import path from 'path'
 import ImageCreator from '@/components/imageCreator/ImageCreator'
 
 export default function NewEntry() {
-    async function addImage(formData: FormData) {
+    async function createImage(formData: FormData) {
         // This needs to be a server action
         'use server'
 
-        // check the input
+        // check the inputs
+        const title = formData.get('imageTitle') as string
+        const content = formData.get('imageDescription') as string
+        const date = formData.get('imageDate')?.toLocaleString() as string
+        const place = formData.get('imagePlace') as string
+
         const fileInput = formData.get('upload') as File
 
         if (!fileInput) {
@@ -42,8 +47,6 @@ export default function NewEntry() {
 
         const imagePath = '/assets/' + filename
 
-        // dans la bdd, créer une entrée pour les images avec id / path
-
         try {
             // Write the file to the specified directory (public/assets) with the modified filename
             await writeFile(path.join(process.cwd(), filePath), buffer)
@@ -54,19 +57,46 @@ export default function NewEntry() {
             console.log('Error occurred ', error)
         }
 
-        // récupérer l'id de l'image pour la rediriger vers le bon slug
-
-        // Redirect the user to the image's infos page
-        redirect('/admin/create/entryInfos')
+        // create a new record in the db
+        const image = await db.image.create({
+            data: {
+                title,
+                imagePath,
+                content,
+                date,
+                place,
+                // galleries
+            },
+        })
+        // Redirect the user to the admin page
+        redirect('/admin')
         // confirmation modal + erase the form
     }
 
+
     return (
         <>
-            <h2>Ajouter une image</h2>
+            <h2>Ajouter des informations à une image</h2>
 
-            <form action={addImage}>
-                <label htmlFor="upload">Ajouter une image :</label>
+            <div>ImageCreator</div>
+            <form action={createImage}>
+                <label htmlFor="imageTitle">Nom de l'image :</label>
+                <input type="text" name="imageTitle" id="imageTitle" />
+                <label htmlFor="imageDescription">
+                    Description de l'image :
+                </label>
+                <textarea name="imageDescription" id="imageDescription" />
+                <label htmlFor="imagePlace">Localisation :</label>
+                <input type="text" name="imagePlace" id="imagePlace" />
+
+                <label htmlFor="imageDate">Date de la prise de vue :</label>
+                <input type="date" name="imageDate" id="imageDate" />
+                <label htmlFor="imageGalleries">Galerie(s) :</label>
+                <select
+                    name="imageGalleries"
+                    id="imageGalleries"
+                    multiple
+                ></select>
                 <input type="file" name="upload" id="upload" required />
                 <button type="submit">submit</button>
             </form>

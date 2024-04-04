@@ -6,10 +6,15 @@ import path from 'path'
 import { uploadImage } from '@/services'
 
 interface FileData {
-    fileInput: File;
-    filePath: string;
+    fileInput: File
+    filePath: string
 }
-export default function ImageCreator({ addImageInFolder }: { addImageInFolder: (filedata: FileData) => void }) {
+
+export default function ImageCreator({
+    addImageInFolder,
+}: {
+    addImageInFolder: (filedata: FileData) => void
+}) {
     async function createImage(formData: FormData) {
         // check the inputs
         const title = formData.get('imageTitle') as string
@@ -46,7 +51,20 @@ export default function ImageCreator({ addImageInFolder }: { addImageInFolder: (
 
         action.CreateImage({ title, imagePath, content, date, place })
         // uploadImage({fileInput, filePath})
-        addImageInFolder({fileInput, filePath})
+        // addImageInFolder({fileInput, filePath})
+
+        try {
+            const data = new FormData()
+            data.set('file', fileInput)
+            const res = await fetch('../../app/api/upload', {
+                method: 'POST',
+                body: data,
+            })
+
+            if (!res.ok) throw new Error(await res.text())
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     return (
