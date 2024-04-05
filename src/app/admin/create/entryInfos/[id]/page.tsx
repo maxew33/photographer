@@ -1,10 +1,10 @@
-import ImageEditor from '@/components/imageEditor/ImageEditor'
 import { db } from '@/db'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import * as action from '@/actions'
+import CreatePictureInfos from '@/components/createPictureInfos/CreatePictureInfos'
 
 interface PictureProps {
     params: {
@@ -72,7 +72,7 @@ export default async function page(props: PictureProps) {
     return (
         <>
             <h1>edit image id: </h1>
-            <ImageEditor picture={picture} />
+            <CreatePictureInfos picture={picture} />
             <br />
             {/* <form action={editImage}>
             <label htmlFor="imageTitle">Nom de l'image :</label>

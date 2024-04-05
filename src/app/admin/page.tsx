@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default async function Admin() {
     const galleries = await db.gallery.findMany()
 
-    const images = await db.image.findMany()
+    const images = await db.picinfos.findMany()
 
     const rendredGalleries = galleries.map((gallery) => {
         return (

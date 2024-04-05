@@ -1,29 +1,33 @@
 :root {
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-    }
+:root {
+}
 
-    * {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-    }
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
 
-    html,
-    body {
-        max-width: 100vw;
-        overflow-x: hidden;
-    }
+html,
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
 
-    body {
-    }
+form {
+    display: flex;
+    flex-direction: column;
+    width: 90vw;
+    max-width: 1400px;
+    margin: auto;
+    gap: .75rem;
+}
 
-    a {
-        color: inherit;
-        text-decoration: none;
-    }
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
 @media (prefers-color-scheme: dark) {
