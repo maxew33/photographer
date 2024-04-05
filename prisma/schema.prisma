@@ -25,6 +25,7 @@ model Picinfos {
   date      String?
   place     String?
   pictureId Int
+  picturePath String
   height    Int
   width     Int
 }

@@ -30,7 +30,10 @@ export async function deleteGallery(id: number) {
 
 // ======== Pictures actions ========= //
 
-export async function editPictureInfos(id: number, updatedInfos: Picinfos) {
+export async function updatePictureInfos(id: number, updatedInfos: Picinfos) {
+    
+    console.log('update in progress')
+    
     await db.picinfos.update({
         where: { id },
         data: updatedInfos,
@@ -52,39 +55,3 @@ export async function createPictureInfos(infos: PicinfosWithoutId) {
     // Redirect the user to the admin page
     redirect('/admin')
 }
-
-// export async function CreateImage(newImage: ImageDataWithoutId) {
-
-//     console.log(456)
-//     await db.image.create({
-//         data: newImage,
-//     })
-
-//     redirect('/admin')
-// }
-
-// export async function editImage(id: number, updatedImage: Image) {
-//     await db.image.update({
-//         where: { id },
-//         data: updatedImage,
-//     })
-
-//     console.log('image edited', updatedImage)
-
-//     redirect('/admin')
-// }
-
-// export async function deleteImage(id: number, pathToDelete: string) {
-
-//     pathToDelete && await access(pathToDelete)
-
-//     // Delete the file
-//     pathToDelete && await unlink(pathToDelete)
-
-//     console.log('Image deleted successfully')
-//     await db.image.delete({
-//         where: { id },
-//     })
-
-//     redirect('/admin')
-// }

@@ -1,10 +1,10 @@
 import { db } from '@/db'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default async function Admin() {
     const galleries = await db.gallery.findMany()
-
-    const images = await db.picinfos.findMany()
+    const infos = await db.picinfos.findMany()
 
     const rendredGalleries = galleries.map((gallery) => {
         return (
@@ -20,14 +20,20 @@ export default async function Admin() {
         )
     })
 
-    const rendredImages = images.map((image) => {
+    const rendredImages = infos.map((info) => {
         return (
             <>
                 <Link
-                    key={`img${image.id}`}
-                    href={`/admin/create/entry/${image.id}`}
+                    key={`img${info.id}`}
+                    href={`/admin/create/entryInfos/${info.pictureId}`}
                 >
-                    {image.title}
+                    {info.title ?? 'noname'}
+                    <br/>
+                    <Image
+                    src={info.picturePath}
+                    height={info.height}
+                    width={info.width}
+                    alt={info.title ?? 'noname'}/>
                 </Link>
                 <br/>
             </>
