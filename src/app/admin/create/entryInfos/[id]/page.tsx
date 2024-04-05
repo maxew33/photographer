@@ -6,73 +6,75 @@ import { notFound } from 'next/navigation'
 import { redirect } from 'next/navigation'
 import * as action from '@/actions'
 
-interface ImageProps {
+interface PictureProps {
     params: {
         id: string
     }
 }
-export default async function page(props: ImageProps) {
-
+export default async function page(props: PictureProps) {
     console.log(props)
 
-    const imgId = parseInt(props.params.id)
+    const picId = parseInt(props.params.id)
 
-    const image = await db.image.findFirst({
+    const picture = await db.picture.findFirst({
         where: {
-            id: imgId,
+            id: picId,
         },
     })
-    if (!image) {
+    if (!picture) {
         return notFound()
     }
 
-    async function editImage(formData: FormData) {
-        'use server'
-        console.log("edit", formData, imgId)
+    // console.log(picture.path)
 
-        // check the inputs
-        const title = formData.get('imageTitle') as string
-        const content = formData.get('imageDescription') as string
-        const date = formData.get('imageDate')?.toLocaleString() as string
-        const place = formData.get('imagePlace') as string
+    // async function editImage(formData: FormData) {
+    //     'use server'
+    //     console.log("edit", formData, picId)
 
-        const data = {
-            id:imgId,
-            title,
-            imagePath:'',
-            content,
-            date,
-            place,
+    //     // check the inputs
+    //     const title = formData.get('imageTitle') as string
+    //     const content = formData.get('imageDescription') as string
+    //     const date = formData.get('imageDate')?.toLocaleString() as string
+    //     const place = formData.get('imagePlace') as string
 
-        }
+    //     const data = {
+    //         id:picId,
+    //         title,
+    //         imagePath:'',
+    //         content,
+    //         date,
+    //         place,
 
-        // action.editImage(null, imgId, )
+    //     }
 
-        // editImageAction()
+    //     // action.editImage(null, imgId, )
 
-        action.editImage(            
-            imgId,
-            data
-        )
+    //     // editImageAction()
 
-    }
+    //     action.editImage(
+    //         picId,
+    //         data
+    //     )
 
-    const editImageAction = action.editImage.bind(
-        null,
-        imgId
-    )
+    // }
 
-    async function deleteImage() {
-        'use server'
-        console.log("delete")
-        redirect('/admin')
-    }
+    // const editImageAction = action.editImage.bind(
+    //     null,
+    //     picId
+    // )
+
+    // async function deleteImage() {
+    //     'use server'
+    //     console.log("delete")
+    //     redirect('/admin')
+    // }
 
     return (
         <>
-            <h1>edit image id: {image.id}</h1>
+            <h1>edit image id: </h1>
+            <ImageEditor picture={picture} />
             <br />
-            <form action={editImage}>
+            {/* <form action={editImage}>
             <label htmlFor="imageTitle">Nom de l'image :</label>
                 <input type="text" name="imageTitle" id="imageTitle" />
                 <label htmlFor="imageDescription">
@@ -94,8 +96,8 @@ export default async function page(props: ImageProps) {
 
                 </select>
                 <Image
-                src={image.imagePath ?? ''}
-                alt={image.title ?? ''}
+                src={picture.path ?? ''}
+                alt={''}
                 width="400"
                 height="400"
             />
@@ -106,7 +108,7 @@ export default async function page(props: ImageProps) {
             <br />
             <form action={deleteImage}>
                 <button type="submit">delete</button>
-            </form>
+            </form> */}
             <hr />
             <Link href="/admin">Admin panel</Link>
         </>

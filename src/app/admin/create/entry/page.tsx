@@ -1,11 +1,11 @@
 import React from 'react'
-import styles from '../Create.module.css'
 import Link from 'next/link'
 import { db } from '@/db'
 import { redirect } from 'next/navigation'
 import { writeFile } from 'fs/promises'
 import path from 'path'
-import ImageCreator from '@/components/imageCreator/ImageCreator'
+
+//ajouter une fonction dans services pour la crétaion / suppression de l'image ???
 
 export default function NewEntry() {
     async function addImage(formData: FormData) {
@@ -37,10 +37,13 @@ export default function NewEntry() {
 
         // Convert the file data to a Buffer
         const buffer = Buffer.from(await fileInput.arrayBuffer())
+
         const filename = fileInput.name.replaceAll(' ', '_')
         const filePath = 'public/assets/' + filename
 
         const imagePath = '/assets/' + filename
+
+        let newPicId = 0
 
         // dans la bdd, créer une entrée pour les images avec id / path
 
@@ -54,11 +57,24 @@ export default function NewEntry() {
             console.log('Error occurred ', error)
         }
 
-        // récupérer l'id de l'image pour la rediriger vers le bon slug
+        try {
+            const newPic = await db.picture.create({
+                data: {
+                    path: imagePath,
+                },
+            })
 
-        // Redirect the user to the image's infos page
-        redirect('/admin/create/entryInfos')
-        // confirmation modal + erase the form
+            console.log('new picture added : ', newPic)
+
+            newPicId = newPic.id
+        } catch (err) {
+            console.error(err)
+            //rediriger vers une page d'erreur
+        }
+
+        console.log(newPicId)
+        
+        redirect('/admin/create/entryInfos/' + newPicId)
     }
 
     return (

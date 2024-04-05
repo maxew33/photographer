@@ -1,59 +1,67 @@
 'use client'
 
-import React, { useState } from 'react'
-import type { Image } from '@prisma/client'
+import React, { useEffect, useState } from 'react'
+import type { Picture } from '@prisma/client'
 import * as action from '@/actions'
+import Image from 'next/image'
 
-interface ImageProps {
-    image: Image
+interface PictureProps {
+    picture: Picture
 }
 
-export default function ImageEditor({ image }: ImageProps) {
-    const [updatedImage, setUpdatedImage] = useState(image)
+export default function ImageEditor({ picture }: PictureProps) {
+    const [imageSize, setImageSize] = useState({ height: 0, width: 0 })
+    const [sizeGotten, setSizeGotten] = useState(false)
 
-    const editImageAction = action.editImage.bind(
-        null,
-        updatedImage.id,
-        updatedImage
-    )
+    useEffect(() => {
+        if (!picture.path) return // Vérifier si picture.path est défini
 
-    console.log(image)
+        const getImageDimensions = async () => {
+            try {
+                // Récupérer l'image sous forme de Blob à partir de l'URL
+                const response = await fetch(picture.path)
+                const blob = await response.blob()
 
-    const changeTitle = (e: { target: { value: string } }) => {
-        setUpdatedImage({ ...updatedImage, title: e.target.value })
-    }
+                // Utiliser FileReader pour obtenir les dimensions de l'image
+                const reader = new FileReader()
+                reader.readAsDataURL(blob)
+                reader.onload = (event) => {
+                    if (
+                        event.target &&
+                        typeof event.target.result === 'string'
+                    ) {
+                        const img = document.createElement('img')
+                        img.src = event.target.result
+                        img.onload = () => {
+                            const width = img.width
+                            const height = img.height
+                            setImageSize({
+                                height,
+                                width,
+                            })
+                            setSizeGotten(true)
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Erreur lors du chargement de l'image:", error)
+            }
+        }
 
-    const deleteImage = async () => {
-        action.deleteImage(image.id, image.imagePath ?? '')
-    }
+        getImageDimensions()
+    }, [picture.path])
 
     return (
         <>
-            <form action={editImageAction}>
-                <label htmlFor="galleryTitle">Nom de l'image :</label>
-                <input
-                    type="text"
-                    name="galleryTitle"
-                    id="galleryTitle"
-                    value={updatedImage.title ?? ''}
-                    onChange={changeTitle}
+            Image editor
+            {sizeGotten && (
+                <Image
+                    src={picture.path}
+                    alt=""
+                    width={imageSize.width}
+                    height={imageSize.height}
                 />
-                <br />
-                <label htmlFor="imageDescription">
-                    Description de l'image :
-                </label>
-                <textarea name="imageDescription" id="imageDescription" />
-
-                <label htmlFor="galleryIllus">
-                    Image mise en avant de la galerie :
-                </label>
-                <select name="galleryIllus" id="galleryIllus"></select>
-                <br />
-                <br />
-                <button type="submit">submit</button>
-            </form>
-            <br />
-            <button onClick={deleteImage}>delete</button>
+            )}
         </>
     )
 }

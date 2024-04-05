@@ -13,9 +13,9 @@ datasource db {
 model Gallery {
   id              Int      @id @default(autoincrement())
   title           String
-  featuredImage   Image?   @relation(name: "FeaturedImage", fields: [featuredImageId], references: [id])
+  featuredPicture   Picture?   @relation(name: "FeaturedPicture", fields: [featuredImageId], references: [id])
   featuredImageId Int?
-  images          Image[]  @relation("GalleryToImage") // relation many-to-many
+  images          Picture[]  @relation("GalleryToPicture") // relation many-to-many
 }
 
 model Image {
@@ -25,6 +25,24 @@ model Image {
   content   String?
   date      String?
   place     String?
-  galleries Gallery[] @relation("GalleryToImage") // relation many-to-many
-  galleriesAsFeaturedImage Gallery[] @relation("FeaturedImage")
 }
+
+model ImageInfos {
+  id        Int       @id @default(autoincrement())
+  title     String?
+  content   String?
+  date      String?
+  place     String?
+  pictureId Int
+}
+
+model Picture{
+  id Int @id @default(autoincrement())
+  path String
+  galleries Gallery[] @relation("GalleryToPicture") // relation many-to-many
+  galleriesAsFeaturedImage Gallery[] @relation("FeaturedPicture")
+}
+
+// IL FAUT MODIFIER LA BDD ET FAIRE LA MIGRATION
+// IL FAUT GERER LA RELATION ENTRE LES MODELS PICTURE ET GALLERY
+// UNE GALLERY PEUT AVOIR PLUSIEURS IMAGES ET UNE IMAGE PEUT APPARTENIR A PLUSIEURS GALLERIES
