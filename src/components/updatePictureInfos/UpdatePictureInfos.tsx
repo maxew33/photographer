@@ -4,12 +4,17 @@ import React, { FormEvent, useEffect, useState } from 'react'
 import type { Picinfos } from '@prisma/client'
 import * as action from '@/actions'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface InfosProps {
     infos: Picinfos
 }
 
 export default function SetPictureInfos({ infos }: InfosProps) {
+
+    // init router
+    const router = useRouter()
+
     const [picInfos, setPicInfos] = useState({
         id: infos.id as number,
         title: infos.title as string,
@@ -22,7 +27,19 @@ export default function SetPictureInfos({ infos }: InfosProps) {
         height: infos.height as number,
     })
 
-    async function AddPicInfos() {
+    const [modalDisplayed, setModalDisplayed] = useState(false)
+
+    const openDeleteModal = () => {
+        console.log(123)
+        setModalDisplayed(!modalDisplayed)
+    }
+
+    const deletePic = () => {
+        console.log('redirect')
+        router.push(`/admin/delete/entry/${picInfos.id}`)
+    }
+
+    const AddPicInfos = async () => {
         console.log('form submitted')
         //if there is a date turn it into a string
         const date = picInfos.date
@@ -35,10 +52,7 @@ export default function SetPictureInfos({ infos }: InfosProps) {
         }
         console.log(data)
 
-        const updateInfosAction = action.updatePictureInfos(
-            data.id,
-            data
-        )
+        const updateInfosAction = action.updatePictureInfos(data.id, data)
     }
 
     const updateForm = (
@@ -102,7 +116,18 @@ export default function SetPictureInfos({ infos }: InfosProps) {
                     onChange={(e) => updateForm(e, 'date')}
                 />
                 <button type="submit">submit</button>
+                <button type="button" onClick={openDeleteModal}>supprimer</button>
             </form>
+            {modalDisplayed && (
+                <div>
+                    Vous êtes sur le point de supprimer cette image et toutes
+                    les informations qui vont avec.
+                    <br />
+                    Voulez-vous confirmer ?
+                    <button onClick={openDeleteModal}>annuler</button>
+                    <button onClick={deletePic}>supprimer</button>
+                </div>
+            )}
             <br />
             {/* <form action={deleteImage}>
                 <button type="submit">delete</button>

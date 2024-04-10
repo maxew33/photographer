@@ -1,9 +1,6 @@
 import { db } from '@/db'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { redirect } from 'next/navigation'
-import * as action from '@/actions'
 import CreatePictureInfos from '@/components/createPictureInfos/CreatePictureInfos'
 import UpdatePictureInfos from '@/components/updatePictureInfos/UpdatePictureInfos'
 

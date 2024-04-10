@@ -69,7 +69,7 @@ export default function SetPictureInfos({ picture }: PictureProps) {
         }
 
         getImageDimensions()
-    }, [picture.path])
+    }, [picInfos, picture.id, picture.path])
 
     console.log(picInfos)
 
