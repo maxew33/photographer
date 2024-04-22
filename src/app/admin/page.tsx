@@ -33,7 +33,8 @@ export default async function Admin() {
                     src={info.picturePath}
                     height={info.height}
                     width={info.width}
-                    alt={info.title ?? 'noname'}/>
+                    alt={info.title ?? 'noname'}
+                    className='image-admin'/>
                 </Link>
                 <br/>
             </>

@@ -25,17 +25,7 @@ export default function SetPictureInfos({ picture }: PictureProps) {
 
 
     // get the size of the picture
-    useEffect(() => {
-
-        async() =>{
-            const entry = await db.picinfos.findFirst({
-                where: {
-                    pictureId: picture.id,
-                },
-            })
-
-        }
-        
+    useEffect(() => {   
 
         if (!picture.path) return // check if picture.path is defined
 
@@ -69,9 +59,8 @@ export default function SetPictureInfos({ picture }: PictureProps) {
         }
 
         getImageDimensions()
-    }, [picInfos, picture.id, picture.path])
+    }, [])
 
-    console.log(picInfos)
 
     async function AddPicInfos() {
         //if there is a date turn it into a string
@@ -148,9 +137,6 @@ export default function SetPictureInfos({ picture }: PictureProps) {
                 <button type="submit">submit</button>
             </form>
             <br />
-            {/* <form action={deleteImage}>
-                <button type="submit">delete</button>
-            </form> */}
         </>
     )
 }

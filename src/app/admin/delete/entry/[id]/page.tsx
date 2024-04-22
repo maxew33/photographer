@@ -26,6 +26,9 @@ export default async function DeleteImage(props: PictureProps) {
     const { picturePath, pictureId } = entry
 
     async function deleteImage() {
+        console.log('********************************')
+        console.log('delete')
+        console.log('********************************')
         try {
             // delete picture data
             await db.gallery.delete({
@@ -36,6 +39,8 @@ export default async function DeleteImage(props: PictureProps) {
             await db.picture.delete({
                 where: { id: pictureId },
             })
+
+            console.log('path', picturePath)
 
             //delete pictue
             await unlink(picturePath)
