@@ -1,6 +1,7 @@
 import { db } from '@/db'
 import { unlink } from 'fs/promises'
 import { redirect } from 'next/navigation'
+import path from 'path'
 
 interface PictureProps {
     params: {
@@ -17,8 +18,6 @@ export default async function DeleteImage(props: PictureProps) {
         },
     })
 
-    console.log('toto', entry)
-
     if (!entry) {
         redirect('/admin')
     }
@@ -26,12 +25,14 @@ export default async function DeleteImage(props: PictureProps) {
     const { picturePath, pictureId } = entry
 
     async function deleteImage() {
+
         console.log('********************************')
-        console.log('delete')
+        console.log('deleting')
         console.log('********************************')
+
         try {
             // delete picture data
-            await db.gallery.delete({
+            await db.picinfos.delete({
                 where: { id },
             })
 
@@ -40,21 +41,25 @@ export default async function DeleteImage(props: PictureProps) {
                 where: { id: pictureId },
             })
 
-            console.log('path', picturePath)
+            const basePath = process.cwd()
 
-            //delete pictue
-            await unlink(picturePath)
+            const relativeFilePath = 'public' + picturePath
+
+            //delete picture
+            await unlink(path.join(basePath, relativeFilePath))
 
             console.log('Image and file deleted')
+
+            // redirect('/admin')
+
         } catch (error) {
             console.error(
                 'Error occurred while deleting image and file:',
                 error
             )
         }
-
-        redirect('/admin')
     }
 
     deleteImage()
+    redirect('/admin')
 }

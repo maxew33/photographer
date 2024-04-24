@@ -35,7 +35,6 @@ export default function SetPictureInfos({ infos }: InfosProps) {
     }
 
     const deletePic = () => {
-        console.log('redirect')
         router.push(`/admin/delete/entry/${picInfos.id}`)
     }
 
