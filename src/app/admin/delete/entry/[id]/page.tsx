@@ -60,6 +60,6 @@ export default async function DeleteImage(props: PictureProps) {
         }
     }
 
-    deleteImage()
+    await deleteImage()
     redirect('/admin')
 }

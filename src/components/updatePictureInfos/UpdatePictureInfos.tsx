@@ -35,7 +35,8 @@ export default function SetPictureInfos({ infos }: InfosProps) {
     }
 
     const deletePic = () => {
-        router.push(`/admin/delete/entry/${picInfos.id}`)
+        // router.push(`/admin/delete/entry/${picInfos.id}`)
+        action.deletePicture(picInfos.id, picInfos.pictureId, picInfos.picturePath)
     }
 
     const AddPicInfos = async () => {
