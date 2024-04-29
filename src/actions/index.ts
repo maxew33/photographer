@@ -55,3 +55,16 @@ export async function createPictureInfos(infos: PicinfosWithoutId) {
     // Redirect the user to the admin page
     redirect('/admin')
 }
+
+export async function deletePicture(id: number, pictureId : number) {
+    await db.picinfos.delete({
+        where: { id },
+    })
+
+    await db.picture.delete({
+        where: { id:pictureId },
+    })
+
+    console.log('********************** everything works fine !')
+
+}

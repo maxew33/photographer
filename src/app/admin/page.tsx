@@ -1,12 +1,48 @@
+// 'use client'
+
 import { db } from '@/db'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+
+//MODIFIER CETTE PAGE POUR QU'ELLE UTILISE UN USE EFFECT
 
 export default async function Admin() {
+    // const [galleries, setGalleries] = useState<
+    //     {
+    //         id: number
+    //         title: string
+    //         featuredImageId: number | null
+    //     }[]
+    // >()
+    // const [infos, setInfos] = useState<
+    //     {
+    //         id: number
+    //         title: string | null
+    //         content: string | null
+    //         date: string | null
+    //         place: string | null
+    //         pictureId: number
+    //         picturePath: string
+    //         height: number
+    //         width: number
+    //     }[]
+    // >()
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const retrievedGalleries = await db.gallery.findMany()
+    //         const retrievedInfos = await db.picinfos.findMany()
+    //         setGalleries(retrievedGalleries)
+    //         setInfos(retrievedInfos)
+    //     }
+
+    //     fetchData()
+    // }, [])
     const galleries = await db.gallery.findMany()
     const infos = await db.picinfos.findMany()
 
-    const rendredGalleries = galleries.map((gallery) => {
+    const rendredGalleries = galleries && galleries.map((gallery) => {
         return (
             <>
                 <Link
@@ -15,12 +51,12 @@ export default async function Admin() {
                 >
                     {gallery.title}
                 </Link>
-                <br/>
+                <br />
             </>
         )
     })
 
-    const rendredImages = infos.map((info) => {
+    const rendredImages = infos && infos.map((info) => {
         return (
             <>
                 <Link
@@ -28,15 +64,16 @@ export default async function Admin() {
                     href={`/admin/create/entryInfos/${info.pictureId}`}
                 >
                     {info.title ?? 'noname'}
-                    <br/>
+                    <br />
                     <Image
-                    src={info.picturePath}
-                    height={info.height}
-                    width={info.width}
-                    alt={info.title ?? 'noname'}
-                    className='image-admin'/>
+                        src={info.picturePath}
+                        height={info.height}
+                        width={info.width}
+                        alt={info.title ?? 'noname'}
+                        className="image-admin"
+                    />
                 </Link>
-                <br/>
+                <br />
             </>
         )
     })
