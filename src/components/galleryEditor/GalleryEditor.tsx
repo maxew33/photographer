@@ -1,14 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
-import type { Gallery } from '@prisma/client'
+import React, { ChangeEventHandler, useState } from 'react'
+import type { Gallery, Picinfos } from '@prisma/client'
 import * as action from '@/actions'
 
 interface GalleryProps {
     gallery: Gallery
+    infos: Picinfos[]
 }
 
-export default function GalleryEditor({ gallery }: GalleryProps) {
+export default function GalleryEditor(props: GalleryProps) {
+    const { gallery, infos } = props
+
+    console.log(infos)
+
     const [updatedGallery, setUpdatedGallery] = useState(gallery)
 
     const editGalleryAction = action.editGallery.bind(
@@ -17,8 +22,13 @@ export default function GalleryEditor({ gallery }: GalleryProps) {
         updatedGallery
     )
 
-    const changeTitle = (e: { target: { value: string } }) => {
-        setUpdatedGallery({ ...updatedGallery, title: e.target.value })
+    const changeTitle: ChangeEventHandler<HTMLInputElement> = (e) => {
+        setUpdatedGallery({ ...updatedGallery, title: e.target.value });
+    }
+
+    const changeFeaturedImage: ChangeEventHandler<HTMLSelectElement> = (e) => {
+        const selectedImageId = parseInt(e.target.value);
+        setUpdatedGallery({ ...updatedGallery, featuredImageId: selectedImageId });
     }
 
     const deleteGallery = () => {
@@ -40,7 +50,22 @@ export default function GalleryEditor({ gallery }: GalleryProps) {
                 <label htmlFor="galleryIllus">
                     Image mise en avant de la galerie :
                 </label>
-                <select name="galleryIllus" id="galleryIllus"></select>
+                <select
+                    name="galleryIllus"
+                    id="galleryIllus"
+                    value={updatedGallery.featuredImageId as number}
+                    onChange={changeFeaturedImage}
+                >
+                    {infos.map((info) => (
+                        <option
+                            key={info.id}
+                            value={info.id}
+                            style={{ background: 'red' }}
+                        >
+                            {info.title ? info.title : 'no title'}
+                        </option>
+                    ))}
+                </select>
                 <br />
                 <br />
                 <button type="submit">submit</button>

@@ -10,6 +10,8 @@ interface GalleryProps {
 }
 
 export default async function Gallery(props: GalleryProps) {
+    const infos = await db.picinfos.findMany()
+    
     const id = parseInt(props.params.id)
     const gallery = await db.gallery.findFirst({
         where: {
@@ -23,7 +25,7 @@ export default async function Gallery(props: GalleryProps) {
         <>
             <h1>edit gallery</h1>
             <br/>
-            <GalleryEditor gallery={gallery}/>
+            <GalleryEditor gallery={gallery} infos={infos}/>
             <hr/>
             <Link href="/admin">Admin panel</Link>
         </>

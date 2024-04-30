@@ -5,8 +5,6 @@ import { redirect } from 'next/navigation'
 import { writeFile } from 'fs/promises'
 import path from 'path'
 
-//ajouter une fonction dans services pour la crétaion / suppression de l'image ???
-
 export default function NewEntry() {
     async function addImage(formData: FormData) {
         // This needs to be a server action
@@ -71,8 +69,6 @@ export default function NewEntry() {
             console.error(err)
             //rediriger vers une page d'erreur
         }
-
-        console.log(newPicId)
         
         redirect('/admin/create/entryInfos/' + newPicId)
     }
